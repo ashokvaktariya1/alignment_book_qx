@@ -105,8 +105,11 @@ def main():
     # Load pretrained model
     #######################
     logger.info("*** Load pretrained model ***")
+    # torch_dtype = (
+    #     model_args.torch_dtype if model_args.torch_dtype in ["auto", None] else getattr(torch, model_args.torch_dtype)
+    # )
     torch_dtype = (
-        model_args.torch_dtype if model_args.torch_dtype in ["auto", None] else getattr(torch, model_args.torch_dtype)
+        model_args.torch_dtype if model_args.torch_dtype in ["auto", None] else str(model_args.torch_dtype)
     )
     quantization_config = get_quantization_config(model_args)
 

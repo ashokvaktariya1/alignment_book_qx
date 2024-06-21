@@ -2,14 +2,18 @@
 model_name_or_path: gpt2
 model_revision: main
 torch_dtype: bfloat16
+use_flash_attention_2: true
+#attn_implementation: flash_attention_2
 
 # Data training arguments
 dataset_mixer:
-  yhavinga/mc4_nl_cleaned: 1.0
+  #yhavinga/mc4_nl_cleaned: 1.0
+  appliedai-qx/sample-dataset-ah: 1.0
+  #HuggingFaceH4/ultrachat_200k: 1.0
 dataset_splits:
   - train
 dataset_configs:
-  - tiny
+  - default
 preprocessing_num_workers: 12
 
 # SFT trainer config
@@ -20,7 +24,7 @@ gradient_accumulation_steps: 1
 gradient_checkpointing: true
 gradient_checkpointing_kwargs:
   use_reentrant: False
-hub_model_id: gpt2-cpt-dutch
+hub_model_id: gpt2
 hub_strategy: every_save
 learning_rate: 2.0e-04
 log_level: info
@@ -43,3 +47,4 @@ save_steps: 100
 save_total_limit: 1
 seed: 42
 warmup_ratio: 0.1
+

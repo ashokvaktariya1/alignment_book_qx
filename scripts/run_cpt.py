@@ -111,6 +111,17 @@ def main():
     ################
     tokenizer = get_tokenizer(model_args, data_args, auto_set_chat_template=False)
 
+    # Set the tokenizer to truncate sequences longer than max_seq_length
+    tokenizer.model_max_length = training_args.max_seq_length
+    tokenizer.init_kwargs['model_max_length'] = training_args.max_seq_length
+
+    # def preprocess_function(examples):
+    #     return tokenizer(examples[data_args.text_column], truncation=True, max_length=training_args.max_seq_length, padding="max_length")
+
+    # train_dataset = train_dataset.map(preprocess_function, batched=True)
+    # if training_args.do_eval:
+    #     eval_dataset = eval_dataset.map(preprocess_function, batched=True)
+
     with training_args.main_process_first(desc="Log a few random samples from the processed training set"):
         for index in random.sample(range(len(raw_datasets["train"])), 3):
             logger.info(f"Sample {index} of the processed training set:\n\n{raw_datasets['train'][index]['text']}")
@@ -119,8 +130,12 @@ def main():
     # Load pretrained model
     #######################
     logger.info("*** Load pretrained model ***")
+    # torch_dtype = (
+    #     model_args.torch_dtype if model_args.torch_dtype in ["auto", None] else getattr(torch, model_args.torch_dtype)
+    # )
+
     torch_dtype = (
-        model_args.torch_dtype if model_args.torch_dtype in ["auto", None] else getattr(torch, model_args.torch_dtype)
+        model_args.torch_dtype if model_args.torch_dtype in ["auto", None] else str(model_args.torch_dtype)
     )
     quantization_config = get_quantization_config(model_args)
 
